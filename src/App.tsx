@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Document, Page } from 'react-pdf';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -86,8 +86,26 @@ const StatusMessage = styled.p`
 const App: React.FC = () => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [documentLoaded, setDocumentLoaded] = useState<boolean>(false);
+  const [scale, setScale] = useState(2);
 
   const pdfFile = "/assets/이석호_portfolio.pdf";
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setScale(1);
+      } else {
+        setScale(2);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -112,7 +130,7 @@ const App: React.FC = () => {
         <ViewerContainer>
           <Document
             file={pdfFile}
-            scale={2}
+            scale={scale}
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={onDocumentLoadError}
             loading={<StatusMessage>포트폴리오를 불러오는 중입니다...</StatusMessage>}
