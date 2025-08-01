@@ -112,7 +112,7 @@ const App: React.FC = () => {
         <ViewerContainer>
           <Document
             file={pdfFile}
-            scale={3}
+            scale={2}
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={onDocumentLoadError}
             loading={<StatusMessage>포트폴리오를 불러오는 중입니다...</StatusMessage>}
